@@ -1,0 +1,54 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "superadmin@mailer.com",
+      "password": "$2a$10$.v0cvvg8d7JLsxsYRY0aTer1tTJbRj06x734mIqE/Wgf80SVrkX0G",
+      "name": "Super Admin",
+      "role": "superadmin",
+      "isActive": true,
+      "createdAt": "2025-12-16T09:09:16.424Z"
+    },
+    {
+      "id": "1765876889523",
+      "email": "shubham.dhyani@singleinterface.com",
+      "password": "$2a$10$1AMMO.rWZiqxGbS3amU1p.OrjX8NYDxrkjhv0vBLEQowDqcHNsVAy",
+      "name": "shubham",
+      "role": "superadmin",
+      "isActive": true,
+      "createdBy": "1",
+      "createdAt": "2025-12-16T09:21:29.583Z"
+    },
+    {
+      "id": "1765876932870",
+      "email": "shubham.dhyani+1@singleinterface.com",
+      "password": "$2a$10$M/RNwLkYk3d2FDkm.lwtHeYUdy29ws8gFG0M1iDOtIkFI35TCP/X6",
+      "name": "shubham",
+      "role": "user",
+      "isActive": true,
+      "createdBy": "1765876889523",
+      "createdAt": "2025-12-16T09:22:12.933Z"
+    },
+    {
+      "id": "1765876964715",
+      "email": "shubham.dhyani+001@singleinterface.com",
+      "password": "$2a$10$3J94CYiwEIK/4ZpoXsfp7OKv3/jmKHjXfq6hoduBgzqZaZXSDRqKi",
+      "name": "Resonanc",
+      "role": "user",
+      "isActive": false,
+      "createdBy": "1765876889523",
+      "createdAt": "2025-12-16T09:22:44.777Z"
+    }
+  ],
+  "senders": [
+    {
+      "id": "1765883832029",
+      "name": "Shubham Dhyani",
+      "email": "shubham.dhyani@singleinterface.com",
+      "password": "fhdk uets ngca icly",
+      "host": "smtp.gmail.com",
+      "port": 587,
+      "createdAt": "2025-12-16T11:17:12.029Z"
+    }
+  ]
+}

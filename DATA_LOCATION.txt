@@ -1,0 +1,67 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        📍 DATA STORAGE LOCATION                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+📁 PRIMARY DATABASE FILE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  /home/shubhamdhyani/Downloads/mailer/backend/data.json
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 WHAT'S STORED:
+  ✓ All user accounts (currently 4 users)
+  ✓ All sender configurations (currently 1 sender)
+  ✓ User roles, passwords, activity status
+  ✓ SMTP server details, email credentials
+
+🔐 FORMAT:
+  ✓ JSON (text-based)
+  ✓ Size: 1.6 KB
+  ✓ Readable and editable
+
+🔄 AUTO-SAVE:
+  ✓ Every user/sender change auto-saves
+  ✓ No manual save required
+  ✓ Persistent on disk
+  ✓ Survives server restarts
+
+📝 HOW TO ACCESS:
+
+  1. View in Terminal:
+     cat /home/shubhamdhyani/Downloads/mailer/backend/data.json
+
+  2. Pretty Print:
+     cat /home/shubhamdhyani/Downloads/mailer/backend/data.json | jq .
+
+  3. Edit in Editor:
+     nano /home/shubhamdhyani/Downloads/mailer/backend/data.json
+
+  4. View Users Only:
+     cat /home/shubhamdhyani/Downloads/mailer/backend/data.json | jq '.users'
+
+  5. View Senders Only:
+     cat /home/shubhamdhyani/Downloads/mailer/backend/data.json | jq '.senders'
+
+💾 BACKUP:
+  cp /home/shubhamdhyani/Downloads/mailer/backend/data.json \
+     /home/shubhamdhyani/Downloads/mailer/backend/data.json.backup
+
+🚀 QUICK COMMANDS:
+
+  # View file
+  cat /home/shubhamdhyani/Downloads/mailer/backend/data.json
+
+  # File size
+  ls -lh /home/shubhamdhyani/Downloads/mailer/backend/data.json
+
+  # Check last modified
+  stat /home/shubhamdhyani/Downloads/mailer/backend/data.json
+
+  # Monitor for changes
+  watch -n 5 'wc -l /home/shubhamdhyani/Downloads/mailer/backend/data.json'
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    ALL YOUR DATA IN ONE FILE                                 ║
+║        This file is your complete system database - backup it!               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
