@@ -1,0 +1,9 @@
+{
+  "name": "bulk-mailer",
+  "version": "1.0.0",
+  "description": "Root package.json for Cloudflare Pages build",
+  "scripts": {
+    "build": "cd frontend && npm ci && npm run build",
+    "dev": "cd frontend && npm run dev"
+  }
+}
