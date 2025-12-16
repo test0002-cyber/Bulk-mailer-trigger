@@ -1,0 +1,15 @@
+# Frontend build configuration for Cloudflare Pages
+
+[build]
+command = "cd frontend && npm install && npm run build"
+publish = "frontend/dist"
+
+[build.environment]
+NODE_VERSION = "18.19.0"
+
+# Environment variables
+[env.production]
+vars = { VITE_API_URL = "https://bulk-mailer-backend.onrender.com" }
+
+[env.staging]
+vars = { VITE_API_URL = "http://localhost:5000" }
