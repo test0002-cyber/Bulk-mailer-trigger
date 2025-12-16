@@ -9,6 +9,9 @@ command = "cd frontend && npm ci && npm run build"
 cwd = "."
 watch_paths = ["frontend/src/**/*.{jsx,js,css}"]
 
+# Deploy command for Pages (no-op since build output is deployed automatically)
+deploy_command = "echo 'Deploying to Cloudflare Pages'"
+
 # Assets configuration
 [build.upload]
 format = "service-worker"
