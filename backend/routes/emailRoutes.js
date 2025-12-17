@@ -9,8 +9,11 @@ export const sendEmail = async (req, res) => {
     if (!senderId) {
       return res.status(400).json({ message: 'Sender ID is required' })
     }
-    if (!recipients || recipients.length === 0) {
-      return res.status(400).json({ message: 'Recipients are required' })
+    if (!recipients || !recipients.to) {
+      return res.status(400).json({ message: 'Recipients (To field) are required' })
+    }
+    if (!csvData || csvData.length === 0) {
+      return res.status(400).json({ message: 'CSV data is required' })
     }
     if (!subject || !message) {
       return res.status(400).json({ message: 'Subject and message are required' })
