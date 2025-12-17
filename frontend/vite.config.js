@@ -7,7 +7,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://mailer-backend.onrender.com', // Update with your Render backend URL
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
