@@ -1,129 +1,20 @@
-.app-wrapper {
-  display: flex;
-  flex-direction: column;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f5f5;
+}
+
+#root {
+  width: 100%;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.app-layout {
-  display: flex;
-  flex: 1;
-  margin-top: 70px;
-}
-
-.app-main-content {
-  flex: 1;
-  margin-left: 250px;
-  padding: 20px;
-  overflow-y: auto;
-  transition: margin-left 0.3s ease;
-}
-
-.app-main {
-  display: flex;
-  gap: 20px;
-  height: 100%;
-}
-
-.app-content {
-  background: linear-gradient(135deg, #f5f3ff 0%, #faf8ff 100%);
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  flex: 0 0 60%;
-  overflow-y: auto;
-  max-height: calc(100vh - 110px);
-}
-
-.app-preview {
-  background: linear-gradient(135deg, #f5f3ff 0%, #faf8ff 100%);
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  flex: 0 0 40%;
-  overflow-y: auto;
-  max-height: calc(100vh - 110px);
-}
-
-.app-preview h2 {
-  margin-top: 0;
-  margin-bottom: 20px;
-  font-size: 1.3em;
-  color: #333;
-}
-
-.preview-section {
-  margin-bottom: 16px;
-  border: 2px solid #e0d5f7;
-  border-radius: 10px;
-  padding: 12px;
-  background: rgba(245, 243, 255, 0.5);
-}
-
-.preview-label {
-  font-weight: 700;
-  color: #667eea;
-  font-size: 0.95em;
-  margin-bottom: 8px;
-}
-
-.preview-value {
-  color: #333;
-  font-size: 0.95em;
-  line-height: 1.4;
-  word-break: break-word;
-  white-space: pre-wrap;
-  background-color: white;
-  padding: 10px 12px;
-  border-radius: 6px;
-  border: 1px solid #f0e5ff;
-}
-
-.preview-empty {
-  color: #999;
-  font-style: italic;
-}
-
-/* Responsive Design */
-@media (max-width: 1100px) {
-  .app-main-content {
-    margin-left: 200px;
-  }
-
-  .app-main {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .app-content,
-  .app-preview {
-    flex: 1;
-    max-height: auto;
-  }
-}
-
-@media (max-width: 768px) {
-  .app-layout {
-    flex-direction: column;
-    margin-top: 0;
-  }
-
-  .app-main-content {
-    margin-left: 0;
-    padding: 10px;
-  }
-
-  .app-content {
-    padding: 20px;
-    max-height: none;
-  }
-
-  .app-main {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .app-preview {
-    max-height: none;
-  }
+.app {
+  width: 100%;
+  min-height: 100vh;
 }
