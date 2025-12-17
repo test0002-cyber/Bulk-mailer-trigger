@@ -233,24 +233,22 @@ function SuperAdminDashboard({ user, token }) {
                           {u.isActive ? 'Disable' : 'Enable'}
                         </button>
 
-                        {u.role !== 'superadmin' && (
-                          <>
-                            <button
-                              className="action-btn edit"
-                              onClick={() => handleEditUser(u)}
-                              title="Edit user"
-                            >
-                              ✏️ Edit
-                            </button>
+                        <button
+                          className="action-btn edit"
+                          onClick={() => handleEditUser(u)}
+                          title="Edit user"
+                        >
+                          ✏️ Edit
+                        </button>
 
-                            <button
-                              className="action-btn delete"
-                              onClick={() => handleDeleteUser(u.id)}
-                              title="Delete user"
-                            >
-                              🗑️ Delete
-                            </button>
-                          </>
+                        {u.role !== 'superadmin' && (
+                          <button
+                            className="action-btn delete"
+                            onClick={() => handleDeleteUser(u.id)}
+                            title="Delete user"
+                          >
+                            🗑️ Delete
+                          </button>
                         )}
                       </div>
                     </td>

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './Sidebar.css'
 
-function Sidebar({ user, onNavigation, currentPage, onLogout }) {
+function Sidebar({ user, onNavigation, currentPage, onLogout, onChangePassword }) {
   const [isOpen, setIsOpen] = useState(true)
   const [showUserMenu, setShowUserMenu] = useState(false)
 
@@ -96,6 +96,16 @@ function Sidebar({ user, onNavigation, currentPage, onLogout }) {
           
           {showUserMenu && isOpen && (
             <div className="user-menu-dropdown">
+              <button 
+                className="menu-btn"
+                onClick={() => {
+                  onChangePassword()
+                  setShowUserMenu(false)
+                }}
+              >
+                <span>🔑</span>
+                <span>Change Password</span>
+              </button>
               <button 
                 className="logout-menu-btn"
                 onClick={() => {

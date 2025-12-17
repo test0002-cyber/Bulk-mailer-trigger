@@ -5,6 +5,7 @@ import AuthLogin from './components/AuthLogin'
 import Sidebar from './components/Sidebar'
 import UserManagement from './components/UserManagement'
 import SenderModal from './components/SenderModal'
+import UserProfile from './components/UserProfile'
 import Header from './components/Header'
 import './App.css'
 
@@ -14,6 +15,7 @@ function App() {
   const [token, setToken] = useState(null)
   const [preview, setPreview] = useState(null)
   const [senderModalOpen, setSenderModalOpen] = useState(false)
+  const [userProfileOpen, setUserProfileOpen] = useState(false)
   const [currentSender, setCurrentSender] = useState(null)
   const [currentPage, setCurrentPage] = useState('bulk-mail') // 'bulk-mail' or 'user-management'
 
@@ -59,6 +61,7 @@ function App() {
               onNavigation={setCurrentPage}
               currentPage={currentPage}
               onLogout={handleLogout}
+              onChangePassword={() => setUserProfileOpen(true)}
             />
             
             <main className="app-main-content">
@@ -119,6 +122,13 @@ function App() {
               onClose={() => setSenderModalOpen(false)}
               onSelectSender={setCurrentSender}
               currentSender={currentSender}
+            />
+          )}
+
+          {userProfileOpen && (
+            <UserProfile
+              user={user}
+              onClose={() => setUserProfileOpen(false)}
             />
           )}
         </>

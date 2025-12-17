@@ -237,4 +237,47 @@ router.delete('/users/:userId', (req, res) => {
   }
 })
 
+// Change password (any user can change their own password)
+router.put('/auth/change-password', (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1]
+    const decoded = verifyToken(token)
+    
+    if (!decoded) {
+      return res.status(401).json({ message: 'Unauthorized' })
+    }
+
+    const { oldPassword, newPassword } = req.body
+
+    if (!oldPassword || !newPassword) {
+      return res.status(400).json({ message: 'Old password and new password are required' })
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: 'New password must be at least 6 characters' })
+    }
+
+    const db = readDB()
+    const user = db.users.find(u => u.id === decoded.id)
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    // Verify old password
+    const isPasswordValid = bcrypt.compareSync(oldPassword, user.password)
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Current password is incorrect' })
+    }
+
+    // Update password
+    user.password = bcrypt.hashSync(newPassword, 10)
+    writeDB(db)
+
+    res.json({ message: 'Password changed successfully' })
+  } catch (error) {
+    res.status(500).json({ message: 'Error changing password', error: error.message })
+  }
+})
+
 export default router

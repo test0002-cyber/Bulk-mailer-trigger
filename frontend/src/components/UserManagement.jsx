@@ -248,7 +248,7 @@ function UserManagement({ user, token, onClose }) {
                       )}
 
                       {/* Edit: SuperAdmin can edit anyone, Admin can edit own users */}
-                      {canManageUser(u) && u.role !== 'superadmin' && (
+                      {canManageUser(u) && (
                         <button
                           className="action-btn edit"
                           onClick={() => handleEditUser(u)}
