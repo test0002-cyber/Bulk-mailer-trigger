@@ -165,21 +165,28 @@ function UserManagement({ user, token, onClose }) {
                   </td>
                   <td>{new Date(u.createdAt).toLocaleDateString()}</td>
                   <td>
-                    {u.isActive ? (
-                      <button
-                        className="action-btn disable"
-                        onClick={() => handleToggleUser(u.id, 'disable')}
-                      >
-                        Disable
-                      </button>
-                    ) : (
-                      <button
-                        className="action-btn enable"
-                        onClick={() => handleToggleUser(u.id, 'enable')}
-                      >
-                        Enable
-                      </button>
-                    )}
+                    <div className="action-buttons-group">
+                      {/* Enable/Disable: Visible to SuperAdmin only */}
+                      {user.role === 'superadmin' && (
+                        u.isActive ? (
+                          <button
+                            className="action-btn disable"
+                            onClick={() => handleToggleUser(u.id, 'disable')}
+                            title="Disable user"
+                          >
+                            Disable
+                          </button>
+                        ) : (
+                          <button
+                            className="action-btn enable"
+                            onClick={() => handleToggleUser(u.id, 'enable')}
+                            title="Enable user"
+                          >
+                            Enable
+                          </button>
+                        )
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

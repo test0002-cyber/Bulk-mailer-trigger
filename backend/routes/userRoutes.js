@@ -96,14 +96,14 @@ router.get('/users', (req, res) => {
   }
 })
 
-// Disable user (Admin or SuperAdmin)
+// Disable user (SuperAdmin only)
 router.put('/users/:userId/disable', (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1]
     const decoded = verifyToken(token)
     
-    if (!decoded || !['admin', 'superadmin'].includes(decoded.role)) {
-      return res.status(403).json({ message: 'Only admin or superadmin can disable users' })
+    if (!decoded || decoded.role !== 'superadmin') {
+      return res.status(403).json({ message: 'Only superadmin can disable users' })
     }
 
     const db = readDB()
@@ -120,14 +120,14 @@ router.put('/users/:userId/disable', (req, res) => {
   }
 })
 
-// Enable user (Admin or SuperAdmin)
+// Enable user (SuperAdmin only)
 router.put('/users/:userId/enable', (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1]
     const decoded = verifyToken(token)
     
-    if (!decoded || !['admin', 'superadmin'].includes(decoded.role)) {
-      return res.status(403).json({ message: 'Only admin or superadmin can enable users' })
+    if (!decoded || decoded.role !== 'superadmin') {
+      return res.status(403).json({ message: 'Only superadmin can enable users' })
     }
 
     const db = readDB()
