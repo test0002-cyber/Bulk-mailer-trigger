@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import dotenv from 'dotenv'
-import { initializeDB } from './db.js'
+import { initializeDB, readDB } from './db.js'
 import { sendEmail, testSender } from './routes/emailRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import { getSenders, addSender, deleteSender, updateSender } from './routes/senderRoutes.js'
@@ -30,6 +30,21 @@ app.use('/auth', userRoutes)
 
 app.get('/health', (req, res) => {
   res.json({ status: 'Server is running' })
+})
+
+app.get('/debug/senders', (req, res) => {
+  const db = readDB()
+  const senders = db.senders || []
+  // Return sender info without passwords
+  const info = senders.map(s => ({
+    id: s.id,
+    name: s.name,
+    email: s.email,
+    host: s.host,
+    port: s.port,
+    hasPassword: !!s.password
+  }))
+  res.json(info)
 })
 
 app.listen(PORT, () => {
