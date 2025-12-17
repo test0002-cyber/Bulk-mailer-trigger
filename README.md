@@ -72,29 +72,6 @@ mailer/
 
 ---
 
-## 🌍 Deployment Options
-
-### Option 1: Deploy LIVE on Cloudflare (FREE) ⭐
-**Recommended for production!**
-- Frontend: Cloudflare Pages (global CDN, unlimited bandwidth)
-- Backend: Render.com (free Node.js hosting)
-- Database: PostgreSQL (256MB free)
-- **Cost: $0/month forever**
-
-👉 **See: [CLOUDFLARE_DEPLOYMENT.md](CLOUDFLARE_DEPLOYMENT.md)** for detailed guide
-👉 **Quick Reference: [CLOUDFLARE_QUICK_REFERENCE.md](CLOUDFLARE_QUICK_REFERENCE.md)**
-
-### Option 2: Deploy LIVE on GitHub Pages (FRONTEND ONLY)
-- Suitable for static preview only
-- Backend must be deployed separately
-- See: [GITHUB_DEPLOYMENT.md](GITHUB_DEPLOYMENT.md)
-
-### Option 3: Run Locally
-- Perfect for development and testing
-- Follow steps below
-
----
-
 ## 🚀 How to Run
 
 ### Quick Start (Recommended)

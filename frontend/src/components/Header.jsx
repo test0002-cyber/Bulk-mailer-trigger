@@ -6,22 +6,12 @@ function Header({ user, onSenderClick, currentSender }) {
       <div className="header-content">
         <h1 className="header-logo">📧 Mailer</h1>
         <div className="header-actions">
-          {currentSender && (
-            <div className="sender-display">
-              <span className="sender-badge">
-                ✓ From: <strong>{currentSender.name}</strong>
-              </span>
-              <span className="sender-email-display">
-                {currentSender.email}
-              </span>
-            </div>
-          )}
           <button 
             className="sender-setup-btn"
             onClick={onSenderClick}
-            title={currentSender ? "Change sender" : "Setup sender"}
+            title="Setup sender"
           >
-            📤 {currentSender ? 'Change Sender' : 'Setup Sender'}
+            📤 {currentSender ? currentSender.name : 'Setup Sender'}
           </button>
         </div>
       </div>

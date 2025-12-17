@@ -204,8 +204,7 @@
 }
 
 .submit-btn,
-.clear-btn,
-.test-btn {
+.clear-btn {
   flex: 1;
   min-width: 150px;
   padding: 14px 24px;
@@ -231,22 +230,6 @@
 }
 
 .submit-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.test-btn {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
-}
-
-.test-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
-}
-
-.test-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }

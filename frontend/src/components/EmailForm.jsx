@@ -93,64 +93,6 @@ function EmailForm({ setPreview, currentSender }) {
     setShowVariableModal(false)
   }
 
-  const handleTestTrigger = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
-    setResponse(null)
-
-    if (!currentSender) {
-      setError('❌ Please select a sender before sending test email')
-      setLoading(false)
-      return
-    }
-
-    if (!formData.subject || !formData.message) {
-      setError('❌ Please fill in Subject and Message fields')
-      setLoading(false)
-      return
-    }
-
-    if (csvData.length === 0) {
-      setError('❌ Please upload a CSV file with data')
-      setLoading(false)
-      return
-    }
-
-    try {
-      // Use first row of CSV data for template replacement
-      const firstRowData = csvData[0]
-
-      const response = await fetch('http://localhost:5000/test-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          senderId: currentSender.id,
-          subject: formData.subject,
-          message: formData.message,
-          rowData: firstRowData
-        })
-      })
-
-      const data = await response.json()
-
-      if (response.ok) {
-        setResponse({
-          message: `✅ Test email sent successfully to ${currentSender.email}`
-        })
-      } else {
-        setError(`❌ ${data.message || 'Failed to send test email'}`)
-      }
-    } catch (err) {
-      setError(`Error: ${err.message}`)
-      console.error('Test email error:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -158,19 +100,13 @@ function EmailForm({ setPreview, currentSender }) {
     setResponse(null)
 
     if (!currentSender) {
-      setError('❌ Please select a sender before sending emails')
+      setError('Please select a sender before sending emails')
       setLoading(false)
       return
     }
 
     if (!formData.to || !formData.subject || !formData.message) {
-      setError('❌ Please fill in all required fields (To, Subject, Message)')
-      setLoading(false)
-      return
-    }
-
-    if (csvData.length === 0) {
-      setError('❌ Please upload a CSV file with recipient data')
+      setError('Please fill in all required fields (To, Subject, Message)')
       setLoading(false)
       return
     }
@@ -200,18 +136,8 @@ function EmailForm({ setPreview, currentSender }) {
         setResponse({
           message: `✅ Successfully sent ${data.successCount} email(s)${data.failureCount > 0 ? ` (${data.failureCount} failed)` : ''}`
         })
-        // Clear form after successful send
-        setTimeout(() => {
-          setFormData({ to: '', cc: '', bcc: '', subject: '', message: '' })
-          setCsvData([])
-          setCsvColumns([])
-          setPreview?.(null)
-        }, 2000)
       } else {
-        // Provide more detailed error message
-        const errorMsg = data.message || 'Failed to send emails'
-        const detailedError = data.details ? `${errorMsg}: ${data.details}` : errorMsg
-        setError(`❌ ${detailedError}`)
+        setError(data.message || 'Failed to send emails')
       }
     } catch (err) {
       setError(`Error: ${err.message}`)
@@ -420,15 +346,6 @@ function EmailForm({ setPreview, currentSender }) {
           ) : (
             `🚀 Send ${csvData.length} Bulk Emails`
           )}
-        </button>
-        <button 
-          type="button"
-          className="test-btn"
-          onClick={handleTestTrigger}
-          disabled={loading || csvData.length === 0}
-          title="Send test email to yourself using first row data"
-        >
-          {loading ? '⏳ Testing...' : '🧪 Send Test Email'}
         </button>
         <button 
           type="button"
