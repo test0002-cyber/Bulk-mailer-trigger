@@ -122,6 +122,7 @@ function App() {
               onClose={() => setSenderModalOpen(false)}
               onSelectSender={setCurrentSender}
               currentSender={currentSender}
+              user={user}
             />
           )}
 

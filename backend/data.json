@@ -12,7 +12,7 @@
     {
       "id": "1765876889523",
       "email": "shubham.dhyani@singleinterface.com",
-      "password": "$2a$10$1AMMO.rWZiqxGbS3amU1p.OrjX8NYDxrkjhv0vBLEQowDqcHNsVAy",
+      "password": "$2a$10$xzHfvEp9hZfHX8cbF.TcM.HRphK2O2Vtx07vyIqSX4TGR3nhQTXO2",
       "name": "shubham",
       "role": "superadmin",
       "isActive": true,
@@ -20,24 +20,34 @@
       "createdAt": "2025-12-16T09:21:29.583Z"
     },
     {
-      "id": "1765876932870",
-      "email": "shubham.dhyani+1@singleinterface.com",
-      "password": "$2a$10$M/RNwLkYk3d2FDkm.lwtHeYUdy29ws8gFG0M1iDOtIkFI35TCP/X6",
+      "id": "1765951807340",
+      "email": "test@example.com",
+      "password": "$2a$10$Dpf8VpCm3qPmnHe6BVUZsOvqgbX9OKFPGWFKlo3ibPc.zs.7hIlty",
+      "name": "Test User",
+      "role": "superadmin",
+      "isActive": true,
+      "createdBy": "1",
+      "createdAt": "2025-12-17T06:10:07.397Z"
+    },
+    {
+      "id": "1765952319505",
+      "email": "shubham.dhyani+admin@singleinterface.com",
+      "password": "$2a$10$vLORgi6hxuOcJDrKGWlv5uSDdcq9V.fUHNHFeasoR4jbFIWmosFJ6",
+      "name": "shubham Dhyani",
+      "role": "admin",
+      "isActive": true,
+      "createdBy": "1",
+      "createdAt": "2025-12-17T06:18:39.567Z"
+    },
+    {
+      "id": "1765952363170",
+      "email": "shubham.dhyani+test@gmail.com",
+      "password": "$2a$10$71HdtjdSFtQMMN849ylgae8SPr0/QdA7ABpdQBTH7EeIzpclIGPrK",
       "name": "shubham",
       "role": "user",
       "isActive": true,
-      "createdBy": "1765876889523",
-      "createdAt": "2025-12-16T09:22:12.933Z"
-    },
-    {
-      "id": "1765876964715",
-      "email": "shubham.dhyani+001@singleinterface.com",
-      "password": "$2a$10$3J94CYiwEIK/4ZpoXsfp7OKv3/jmKHjXfq6hoduBgzqZaZXSDRqKi",
-      "name": "Resonanc",
-      "role": "user",
-      "isActive": false,
-      "createdBy": "1765876889523",
-      "createdAt": "2025-12-16T09:22:44.777Z"
+      "createdBy": "1765952319505",
+      "createdAt": "2025-12-17T06:19:23.234Z"
     }
   ],
   "senders": [

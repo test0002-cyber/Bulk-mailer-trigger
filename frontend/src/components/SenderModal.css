@@ -142,6 +142,13 @@
   color: #666;
 }
 
+.sender-creator {
+  font-size: 0.85em;
+  color: #999;
+  margin-top: 2px;
+  font-style: italic;
+}
+
 .delete-btn {
   background: transparent;
   border: none;
@@ -153,6 +160,20 @@
 }
 
 .delete-btn:hover {
+  transform: scale(1.2);
+}
+
+.edit-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 4px;
+  transition: transform 0.2s ease;
+  margin-left: 8px;
+}
+
+.edit-btn:hover {
   transform: scale(1.2);
 }
 

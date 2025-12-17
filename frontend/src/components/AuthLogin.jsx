@@ -77,11 +77,6 @@ function AuthLogin({ onLoginSuccess }) {
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
-
-        <div className="demo-credentials">
-          <p>Demo SuperAdmin:</p>
-          <code>superadmin@mailer.com / superadmin123</code>
-        </div>
       </div>
     </div>
   )

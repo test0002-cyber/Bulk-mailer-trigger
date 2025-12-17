@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import apiClient from '../api'
 import './SenderModal.css'
 
-function SenderModal({ isOpen, onClose, onSelectSender, currentSender }) {
+function SenderModal({ isOpen, onClose, onSelectSender, currentSender, user }) {
   const [senders, setSenders] = useState([])
   const [showForm, setShowForm] = useState(false)
+  const [editingId, setEditingId] = useState(null)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -56,21 +57,34 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender }) {
 
     setLoading(true)
     try {
-      const response = await apiClient.post('/senders', {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        host: formData.host,
-        port: parseInt(formData.port)
-      })
+      if (editingId) {
+        // Update existing sender
+        const response = await apiClient.put(`/senders/${editingId}`, {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          host: formData.host,
+          port: parseInt(formData.port)
+        })
+        setSuccess('Sender updated successfully!')
+      } else {
+        // Create new sender
+        const response = await apiClient.post('/senders', {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          host: formData.host,
+          port: parseInt(formData.port)
+        })
+        setSuccess('Sender added successfully!')
+      }
 
-      setSuccess('Sender added successfully!')
       setFormData({ name: '', email: '', password: '', host: 'smtp.gmail.com', port: '587' })
+      setEditingId(null)
       setShowForm(false)
       loadSenders()
 
       setTimeout(() => {
-        onSelectSender(response.data.sender)
         onClose()
       }, 1000)
     } catch (err) {
@@ -85,12 +99,23 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender }) {
     onClose()
   }
 
+  const handleEditSender = (sender) => {
+    setEditingId(sender.id)
+    setFormData({
+      name: sender.name,
+      email: sender.email,
+      password: sender.password,
+      host: sender.host,
+      port: sender.port.toString()
+    })
+    setShowForm(true)
+  }
+
   const handleDeleteSender = async (id) => {
     if (!window.confirm('Are you sure you want to delete this sender?')) return
 
     try {
       await apiClient.delete(`/senders/${id}`)
-
       loadSenders()
       setSuccess('Sender deleted successfully')
     } catch (err) {
@@ -104,6 +129,10 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender }) {
       ...prev,
       [name]: value
     }))
+  }
+
+  const canManageSender = (sender) => {
+    return user?.role === 'superadmin' || sender.createdBy === user?.id
   }
 
   if (!isOpen) return null
@@ -125,6 +154,7 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender }) {
                   <div className="sender-info" onClick={() => handleSelectSender(sender)}>
                     <div className="sender-name">{sender.name}</div>
                     <div className="sender-email">{sender.email}</div>
+                    <div className="sender-creator">Created by: {sender.createdByEmail || 'Unknown'}</div>
                   </div>
                   <div className="sender-actions">
                     <button
@@ -135,19 +165,34 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender }) {
                     >
                       {testing === sender.id ? '⏳' : '🔌'}
                     </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleDeleteSender(sender.id)}
-                      title="Delete sender"
-                    >
-                      🗑️
-                    </button>
+                    {canManageSender(sender) && (
+                      <>
+                        <button
+                          className="edit-btn"
+                          onClick={() => handleEditSender(sender)}
+                          title="Edit sender"
+                        >
+                          ✏️
+                        </button>
+                        <button
+                          className="delete-btn"
+                          onClick={() => handleDeleteSender(sender.id)}
+                          title="Delete sender"
+                        >
+                          🗑️
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}
               <button
                 className="add-sender-btn"
-                onClick={() => setShowForm(true)}
+                onClick={() => {
+                  setEditingId(null)
+                  setFormData({ name: '', email: '', password: '', host: 'smtp.gmail.com', port: '587' })
+                  setShowForm(true)
+                }}
               >
                 ➕ Add New Sender
               </button>
@@ -156,7 +201,7 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender }) {
 
           {showForm && (
             <form onSubmit={handleAddSender} className="sender-form">
-              <h3>{senders.length > 0 ? 'Add New Sender' : 'Add Your First Sender'}</h3>
+              <h3>{editingId ? 'Edit Sender' : (senders.length > 0 ? 'Add New Sender' : 'Add Your First Sender')}</h3>
               
               <div className="form-group">
                 <label htmlFor="name">Sender Name</label>
@@ -232,17 +277,19 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender }) {
 
               <div className="form-buttons">
                 <button type="submit" className="submit-btn" disabled={loading}>
-                  {loading ? 'Saving...' : 'Save Sender'}
+                  {loading ? 'Saving...' : (editingId ? 'Update Sender' : 'Save Sender')}
                 </button>
-                {senders.length > 0 && (
-                  <button
-                    type="button"
-                    className="cancel-btn"
-                    onClick={() => setShowForm(false)}
-                  >
-                    Cancel
-                  </button>
-                )}
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  onClick={() => {
+                    setShowForm(false)
+                    setEditingId(null)
+                    setFormData({ name: '', email: '', password: '', host: 'smtp.gmail.com', port: '587' })
+                  }}
+                >
+                  Cancel
+                </button>
               </div>
             </form>
           )}
