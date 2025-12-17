@@ -246,6 +246,34 @@
   color: white;
 }
 
+.action-btn.edit {
+  background: #bbdefb;
+  color: #01579b;
+  margin-left: 4px;
+}
+
+.action-btn.edit:hover {
+  background: #42a5f5;
+  color: white;
+}
+
+.action-btn.delete {
+  background: #ffcdd2;
+  color: #c62828;
+  margin-left: 4px;
+}
+
+.action-btn.delete:hover {
+  background: #ef5350;
+  color: white;
+}
+
+.action-buttons-group {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
 /* Scrollbar styling */
 .user-management-container::-webkit-scrollbar {
   width: 8px;
