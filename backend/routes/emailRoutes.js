@@ -123,7 +123,9 @@ export const testSender = async (req, res) => {
       auth: {
         user: sender.email,
         pass: sender.password
-      }
+      },
+      connectionTimeout: 5000,
+      socketTimeout: 5000
     })
 
     // If testData is provided, send a test email with the first row data
@@ -173,13 +175,30 @@ export const testSender = async (req, res) => {
       })
     }
 
-    // If no testData, just verify connection
-    await transporter.verify()
+    // If no testData, just verify connection with timeout
+    const verifyPromise = transporter.verify()
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Connection timeout - please check SMTP credentials')), 10000)
+    )
+
+    await Promise.race([verifyPromise, timeoutPromise])
 
     res.json({ message: 'Sender connection is valid' })
   } catch (error) {
     console.error('Sender test error:', error)
-    res.status(400).json({ message: 'Failed to send test email', error: error.message })
+    
+    // Provide helpful error messages based on error type
+    let message = 'Failed to connect to sender'
+    if (error.message.includes('timeout')) {
+      message = 'Connection timeout - verify SMTP host and port are correct'
+    } else if (error.message.includes('Invalid login')) {
+      message = 'Invalid email or password - check sender credentials'
+    } else if (error.message.includes('ECONNREFUSED')) {
+      message = 'Connection refused - check SMTP host and port'
+    }
+
+    res.status(400).json({ message, error: error.message })
   }
+}
 }
 

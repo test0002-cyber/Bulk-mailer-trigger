@@ -7,7 +7,7 @@ const getApiBaseUrl = () => {
     return '/api'
   }
   
-  // In production, use the Render backend URL
+  // In production, always use the Render backend URL
   return 'https://bulk-mailer-trigger.onrender.com'
 }
 
@@ -28,5 +28,20 @@ apiClient.interceptors.request.use((config) => {
   }
   return config
 })
+
+// Log API calls for debugging
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('API Error:', {
+      url: error.config?.url,
+      method: error.config?.method,
+      status: error.response?.status,
+      message: error.message,
+      data: error.response?.data
+    })
+    return Promise.reject(error)
+  }
+)
 
 export default apiClient
