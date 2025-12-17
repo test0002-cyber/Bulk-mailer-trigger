@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import apiClient from '../api'
 import './SuperAdminDashboard.css'
 
 function SuperAdminDashboard({ user, token }) {
@@ -22,9 +22,7 @@ function SuperAdminDashboard({ user, token }) {
   const fetchUsers = async () => {
     try {
       setLoading(true)
-      const res = await axios.get('/api/auth/users', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      const res = await apiClient.get('/auth/users')
       setUsers(res.data)
       setError(null)
     } catch (err) {
@@ -37,12 +35,11 @@ function SuperAdminDashboard({ user, token }) {
   const handleCreateUser = async (e) => {
     e.preventDefault()
     try {
-      await axios.post('/api/auth/register', 
+      await apiClient.post('/auth/register', 
         {
           ...formData,
           createdBy: user.id
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
+        }
       )
       setSuccess('User created successfully!')
       setFormData({ name: '', email: '', password: '', role: 'user' })
@@ -57,9 +54,7 @@ function SuperAdminDashboard({ user, token }) {
   const toggleUserStatus = async (userId, isActive) => {
     try {
       const endpoint = isActive ? 'disable' : 'enable'
-      await axios.put(`/api/auth/users/${userId}/${endpoint}`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      await apiClient.put(`/auth/users/${userId}/${endpoint}`, {})
       fetchUsers()
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update user')

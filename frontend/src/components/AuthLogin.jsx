@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import axios from 'axios'
+import apiClient from '../api'
 import './AuthLogin.css'
 
 function AuthLogin({ onLoginSuccess }) {
@@ -15,7 +15,7 @@ function AuthLogin({ onLoginSuccess }) {
     setError(null)
 
     try {
-      const res = await axios.post('/api/auth/login', { email, password })
+      const res = await apiClient.post('/auth/login', { email, password })
       localStorage.setItem('token', res.data.token)
       localStorage.setItem('user', JSON.stringify(res.data.user))
       onLoginSuccess(res.data.user, res.data.token)

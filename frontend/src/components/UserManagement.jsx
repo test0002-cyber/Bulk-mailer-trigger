@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import apiClient from '../api'
 import './UserManagement.css'
 
 function UserManagement({ user, token, onClose }) {
@@ -22,9 +22,7 @@ function UserManagement({ user, token, onClose }) {
   const fetchUsers = async () => {
     try {
       setLoading(true)
-      const res = await axios.get('/api/auth/users', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      const res = await apiClient.get('/auth/users')
       setUsers(res.data)
       setError(null)
     } catch (err) {
@@ -37,11 +35,9 @@ function UserManagement({ user, token, onClose }) {
   const handleCreateUser = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post('/api/auth/register', {
+      const res = await apiClient.post('/auth/register', {
         ...formData,
         createdBy: user.id
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
       })
       setUsers([...users, res.data.user])
       setFormData({ name: '', email: '', password: '', role: 'user' })
@@ -56,9 +52,7 @@ function UserManagement({ user, token, onClose }) {
   const handleToggleUser = async (userId, action) => {
     try {
       const endpoint = action === 'enable' ? 'enable' : 'disable'
-      await axios.put(`/api/auth/users/${userId}/${endpoint}`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      await apiClient.put(`/auth/users/${userId}/${endpoint}`, {})
       fetchUsers()
       setSuccess(`User ${action}d successfully!`)
       setTimeout(() => setSuccess(null), 3000)

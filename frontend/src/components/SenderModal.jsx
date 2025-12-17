@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import apiClient from '../api'
 import './SenderModal.css'
 
 function SenderModal({ isOpen, onClose, onSelectSender, currentSender }) {
@@ -24,11 +25,8 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender }) {
 
   const loadSenders = async () => {
     try {
-      const response = await fetch('http://localhost:5000/senders')
-      if (response.ok) {
-        const data = await response.json()
-        setSenders(data)
-      }
+      const response = await apiClient.get('/senders')
+      setSenders(response.data)
     } catch (err) {
       console.error('Failed to load senders:', err)
     }
@@ -37,19 +35,10 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender }) {
   const testSenderConnection = async (senderId) => {
     try {
       setTesting(senderId)
-      const response = await fetch('http://localhost:5000/test-sender', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ senderId })
-      })
-      const data = await response.json()
-      if (response.ok) {
-        alert('✅ Sender connection is valid!')
-      } else {
-        alert('❌ Connection failed: ' + data.message)
-      }
+      const response = await apiClient.post('/test-sender', { senderId })
+      alert('✅ Sender connection is valid!')
     } catch (err) {
-      alert('❌ Error testing sender: ' + err.message)
+      alert('❌ Connection failed: ' + (err.response?.data?.message || err.message))
     } finally {
       setTesting(null)
     }
@@ -67,35 +56,25 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender }) {
 
     setLoading(true)
     try {
-      const response = await fetch('http://localhost:5000/senders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          host: formData.host,
-          port: parseInt(formData.port)
-        })
+      const response = await apiClient.post('/senders', {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        host: formData.host,
+        port: parseInt(formData.port)
       })
 
-      const data = await response.json()
+      setSuccess('Sender added successfully!')
+      setFormData({ name: '', email: '', password: '', host: 'smtp.gmail.com', port: '587' })
+      setShowForm(false)
+      loadSenders()
 
-      if (response.ok) {
-        setSuccess('Sender added successfully!')
-        setFormData({ name: '', email: '', password: '', host: 'smtp.gmail.com', port: '587' })
-        setShowForm(false)
-        loadSenders()
-
-        setTimeout(() => {
-          onSelectSender(data.sender)
-          onClose()
-        }, 1000)
-      } else {
-        setError(data.message || 'Failed to add sender')
-      }
+      setTimeout(() => {
+        onSelectSender(response.data.sender)
+        onClose()
+      }, 1000)
     } catch (err) {
-      setError('Error: ' + err.message)
+      setError(err.response?.data?.message || 'Error: ' + err.message)
     } finally {
       setLoading(false)
     }
@@ -110,18 +89,12 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender }) {
     if (!window.confirm('Are you sure you want to delete this sender?')) return
 
     try {
-      const response = await fetch(`http://localhost:5000/senders/${id}`, {
-        method: 'DELETE'
-      })
+      await apiClient.delete(`/senders/${id}`)
 
-      if (response.ok) {
-        loadSenders()
-        setSuccess('Sender deleted successfully')
-      } else {
-        setError('Failed to delete sender')
-      }
+      loadSenders()
+      setSuccess('Sender deleted successfully')
     } catch (err) {
-      setError('Error: ' + err.message)
+      setError(err.response?.data?.message || 'Failed to delete sender')
     }
   }
 

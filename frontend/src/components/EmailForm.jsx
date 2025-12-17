@@ -1,6 +1,6 @@
 
 import { useState, useRef } from 'react'
-import axios from 'axios'
+import apiClient from '../api'
 import { parseCSV } from './csvUtils'
 import './EmailForm.css'
 
@@ -112,35 +112,23 @@ function EmailForm({ setPreview, currentSender }) {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
+      const response = await apiClient.post('/send-email', {
+        senderId: currentSender.id,
+        recipients: {
+          to: formData.to,
+          cc: formData.cc,
+          bcc: formData.bcc
         },
-        body: JSON.stringify({
-          senderId: currentSender.id,
-          recipients: {
-            to: formData.to,
-            cc: formData.cc,
-            bcc: formData.bcc
-          },
-          subject: formData.subject,
-          message: formData.message,
-          csvData: csvData
-        })
+        subject: formData.subject,
+        message: formData.message,
+        csvData: csvData
       })
 
-      const data = await response.json()
-
-      if (response.ok) {
-        setResponse({
-          message: `✅ Successfully sent ${data.successCount} email(s)${data.failureCount > 0 ? ` (${data.failureCount} failed)` : ''}`
-        })
-      } else {
-        setError(data.message || 'Failed to send emails')
-      }
+      setResponse({
+        message: `✅ Successfully sent ${response.data.successCount} email(s)${response.data.failureCount > 0 ? ` (${response.data.failureCount} failed)` : ''}`
+      })
     } catch (err) {
-      setError(`Error: ${err.message}`)
+      setError(err.response?.data?.message || `Error: ${err.message}`)
       console.error('Send error:', err)
     } finally {
       setLoading(false)
