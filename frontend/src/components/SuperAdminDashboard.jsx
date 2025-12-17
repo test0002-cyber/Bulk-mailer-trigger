@@ -7,6 +7,7 @@ function SuperAdminDashboard({ user, token }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [showCreateForm, setShowCreateForm] = useState(false)
+  const [editingUserId, setEditingUserId] = useState(null)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -61,6 +62,53 @@ function SuperAdminDashboard({ user, token }) {
     }
   }
 
+  const handleEditUser = (u) => {
+    setEditingUserId(u.id)
+    setFormData({
+      name: u.name,
+      email: u.email,
+      password: '',
+      role: u.role
+    })
+    setShowCreateForm(true)
+  }
+
+  const handleUpdateUser = async (e) => {
+    e.preventDefault()
+    try {
+      const updateData = {
+        name: formData.name,
+        email: formData.email,
+        role: formData.role
+      }
+      if (formData.password) {
+        updateData.password = formData.password
+      }
+      
+      const res = await apiClient.put(`/auth/users/${editingUserId}`, updateData)
+      setUsers(users.map(u => u.id === editingUserId ? res.data.user : u))
+      setFormData({ name: '', email: '', password: '', role: 'user' })
+      setEditingUserId(null)
+      setShowCreateForm(false)
+      setSuccess('User updated successfully!')
+      setTimeout(() => setSuccess(null), 3000)
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to update user')
+    }
+  }
+
+  const handleDeleteUser = async (userId) => {
+    if (!window.confirm('Are you sure you want to delete this user?')) return
+    try {
+      await apiClient.delete(`/auth/users/${userId}`)
+      setUsers(users.filter(u => u.id !== userId))
+      setSuccess('User deleted successfully!')
+      setTimeout(() => setSuccess(null), 3000)
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to delete user')
+    }
+  }
+
   return (
     <div className="superadmin-dashboard">
       <div className="dashboard-header">
@@ -74,7 +122,11 @@ function SuperAdminDashboard({ user, token }) {
       <div className="dashboard-actions">
         <button 
           className="btn btn-primary"
-          onClick={() => setShowCreateForm(!showCreateForm)}
+          onClick={() => {
+            setShowCreateForm(!showCreateForm)
+            setEditingUserId(null)
+            setFormData({ name: '', email: '', password: '', role: 'user' })
+          }}
         >
           {showCreateForm ? '❌ Cancel' : '➕ Create New User'}
         </button>
@@ -82,8 +134,8 @@ function SuperAdminDashboard({ user, token }) {
 
       {showCreateForm && (
         <div className="create-form-container">
-          <form onSubmit={handleCreateUser} className="create-form">
-            <h2>Create New User</h2>
+          <form onSubmit={editingUserId ? handleUpdateUser : handleCreateUser} className="create-form">
+            <h2>{editingUserId ? 'Edit User' : 'Create New User'}</h2>
             
             <div className="form-row">
               <div className="form-group">
@@ -108,12 +160,12 @@ function SuperAdminDashboard({ user, token }) {
 
             <div className="form-row">
               <div className="form-group">
-                <label>Password</label>
+                <label>Password {editingUserId && '(leave blank to keep current)'}</label>
                 <input
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  required
+                  required={!editingUserId}
                 />
               </div>
               <div className="form-group">
@@ -129,7 +181,9 @@ function SuperAdminDashboard({ user, token }) {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-success">Create User</button>
+            <button type="submit" className="btn btn-success">
+              {editingUserId ? 'Update User' : 'Create User'}
+            </button>
           </form>
         </div>
       )}
@@ -171,12 +225,34 @@ function SuperAdminDashboard({ user, token }) {
                     </td>
                     <td>{new Date(u.createdAt).toLocaleDateString()}</td>
                     <td>
-                      <button
-                        className={`action-btn ${u.isActive ? 'btn-danger' : 'btn-success'}`}
-                        onClick={() => toggleUserStatus(u.id, u.isActive)}
-                      >
-                        {u.isActive ? 'Disable' : 'Enable'}
-                      </button>
+                      <div className="action-buttons-group">
+                        <button
+                          className={`action-btn ${u.isActive ? 'btn-danger' : 'btn-success'}`}
+                          onClick={() => toggleUserStatus(u.id, u.isActive)}
+                        >
+                          {u.isActive ? 'Disable' : 'Enable'}
+                        </button>
+
+                        {u.role !== 'superadmin' && (
+                          <>
+                            <button
+                              className="action-btn edit"
+                              onClick={() => handleEditUser(u)}
+                              title="Edit user"
+                            >
+                              ✏️ Edit
+                            </button>
+
+                            <button
+                              className="action-btn delete"
+                              onClick={() => handleDeleteUser(u.id)}
+                              title="Delete user"
+                            >
+                              🗑️ Delete
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
