@@ -1,0 +1,14 @@
+[env.production]
+name = "bulk-mailer-trigger"
+type = "javascript"
+
+[build]
+command = "cd frontend && npm install && npm run build"
+cwd = "/opt/buildhome/repo"
+watch_paths = ["frontend/**/*.jsx", "frontend/**/*.css", "frontend/**/*.js"]
+
+[build.upload]
+directory = "frontend/dist"
+
+[env.production.routes]
+pattern = "*"
