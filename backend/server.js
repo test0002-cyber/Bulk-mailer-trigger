@@ -18,7 +18,7 @@ app.use(cors())
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
 
-// Routes
+// API Routes// Routes
 app.post('/send-email', sendEmail)
 app.post('/test-sender', testSender)
 app.get('/senders', getSenders)
