@@ -200,5 +200,4 @@ export const testSender = async (req, res) => {
     res.status(400).json({ message, error: error.message })
   }
 }
-}
 
