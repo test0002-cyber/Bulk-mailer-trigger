@@ -135,6 +135,58 @@ function EmailForm({ setPreview, currentSender }) {
     }
   }
 
+  const handleTestEmail = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    setResponse(null)
+
+    if (!currentSender) {
+      setError('Please select a sender before sending test email')
+      setLoading(false)
+      return
+    }
+
+    if (!formData.to || !formData.subject || !formData.message) {
+      setError('Please fill in all required fields (To, Subject, Message)')
+      setLoading(false)
+      return
+    }
+
+    if (csvData.length === 0) {
+      setError('Please upload a CSV file first')
+      setLoading(false)
+      return
+    }
+
+    try {
+      const firstRowData = csvData[0] // Get first row data
+
+      const response = await apiClient.post('/test-sender', {
+        senderId: currentSender.id,
+        testData: {
+          recipients: {
+            to: formData.to,
+            cc: formData.cc,
+            bcc: formData.bcc
+          },
+          subject: formData.subject,
+          message: formData.message,
+          firstRow: firstRowData
+        }
+      })
+
+      setResponse({
+        message: `✅ Test email sent successfully to ${response.data.testEmail}!`
+      })
+    } catch (err) {
+      setError(err.response?.data?.message || `Error: ${err.message}`)
+      console.error('Test email error:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <form onSubmit={handleSubmit} className="email-form">
       {/* CSV Upload Section */}
@@ -321,6 +373,22 @@ function EmailForm({ setPreview, currentSender }) {
 
       {/* Action Buttons */}
       <div className="action-buttons">
+        <button 
+          type="button"
+          className="test-email-btn"
+          onClick={handleTestEmail}
+          disabled={loading || csvData.length === 0}
+          title="Send test email using first row of CSV data"
+        >
+          {loading ? (
+            <>
+              <span className="loading-spinner"></span>
+              Sending Test...
+            </>
+          ) : (
+            `📧 Send Test Email (First Row)`
+          )}
+        </button>
         <button 
           type="submit" 
           className="submit-btn"

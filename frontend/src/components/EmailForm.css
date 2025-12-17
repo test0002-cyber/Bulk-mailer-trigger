@@ -204,7 +204,8 @@
 }
 
 .submit-btn,
-.clear-btn {
+.clear-btn,
+.test-email-btn {
   flex: 1;
   min-width: 150px;
   padding: 14px 24px;
@@ -216,6 +217,22 @@
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.test-email-btn {
+  background: linear-gradient(135deg, #13547a 0%, #80d0c7 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(19, 84, 122, 0.3);
+}
+
+.test-email-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(19, 84, 122, 0.4);
+}
+
+.test-email-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .submit-btn {

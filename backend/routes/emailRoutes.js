@@ -101,10 +101,10 @@ export const sendEmail = async (req, res) => {
   }
 }
 
-// Test sender connection
+// Test sender connection and send test email
 export const testSender = async (req, res) => {
   try {
-    const { senderId } = req.body
+    const { senderId, testData } = req.body
 
     const db = readDB()
     const sender = db.senders.find(s => s.id === senderId)
@@ -123,13 +123,60 @@ export const testSender = async (req, res) => {
       }
     })
 
-    // Verify connection
+    // If testData is provided, send a test email with the first row data
+    if (testData && testData.recipients && testData.subject && testData.message) {
+      // Helper function to replace variables in a string
+      const replaceVars = (str, row) => {
+        if (!str) return ''
+        return str.replace(/{{(.*?)}}/g, (_, variable) => row[variable] || '')
+      }
+
+      // Get the first row of CSV data (or use testData.firstRow)
+      const firstRowData = testData.firstRow || {}
+
+      // Replace variables in content
+      const toEmail = replaceVars(testData.recipients.to, firstRowData)
+      const ccEmails = testData.recipients.cc ? replaceVars(testData.recipients.cc, firstRowData) : undefined
+      const bccEmails = testData.recipients.bcc ? replaceVars(testData.recipients.bcc, firstRowData) : undefined
+      const emailSubject = replaceVars(testData.subject, firstRowData)
+      const emailMessage = replaceVars(testData.message, firstRowData)
+
+      if (!toEmail || toEmail.trim() === '') {
+        return res.status(400).json({ message: 'No valid recipient email found in test data' })
+      }
+
+      const mailOptions = {
+        from: `${sender.name} <${sender.email}>`,
+        to: toEmail,
+        subject: emailSubject,
+        html: emailMessage.replace(/\n/g, '<br>'),
+        text: emailMessage
+      }
+
+      // Add CC and BCC if provided
+      if (ccEmails && ccEmails.trim()) {
+        mailOptions.cc = ccEmails
+      }
+      if (bccEmails && bccEmails.trim()) {
+        mailOptions.bcc = bccEmails
+      }
+
+      await transporter.sendMail(mailOptions)
+
+      return res.json({
+        message: 'Test email sent successfully!',
+        testEmail: toEmail,
+        subject: emailSubject
+      })
+    }
+
+    // If no testData, just verify connection
     await transporter.verify()
 
     res.json({ message: 'Sender connection is valid' })
   } catch (error) {
     console.error('Sender test error:', error)
-    res.status(400).json({ message: 'Failed to connect to sender', error: error.message })
+    res.status(400).json({ message: 'Failed to send test email', error: error.message })
   }
 }
 
