@@ -9,9 +9,7 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender, user }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: '',
-    host: 'smtp.gmail.com',
-    port: '587'
+    password: ''
   })
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
@@ -50,8 +48,8 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender, user }) {
     setError(null)
     setSuccess(null)
 
-    if (!formData.name || !formData.email || !formData.password || !formData.host || !formData.port) {
-      setError('All fields are required')
+    if (!formData.name || !formData.email || !formData.password) {
+      setError('Name, email, and password are required')
       return
     }
 
@@ -62,9 +60,7 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender, user }) {
         const response = await apiClient.put(`/senders/${editingId}`, {
           name: formData.name,
           email: formData.email,
-          password: formData.password,
-          host: formData.host,
-          port: parseInt(formData.port)
+          password: formData.password
         })
         setSuccess('Sender updated successfully!')
       } else {
@@ -72,14 +68,12 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender, user }) {
         const response = await apiClient.post('/senders', {
           name: formData.name,
           email: formData.email,
-          password: formData.password,
-          host: formData.host,
-          port: parseInt(formData.port)
+          password: formData.password
         })
         setSuccess('Sender added successfully!')
       }
 
-      setFormData({ name: '', email: '', password: '', host: 'smtp.gmail.com', port: '587' })
+      setFormData({ name: '', email: '', password: '' })
       setEditingId(null)
       setShowForm(false)
       loadSenders()
@@ -104,9 +98,7 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender, user }) {
     setFormData({
       name: sender.name,
       email: sender.email,
-      password: sender.password,
-      host: sender.host,
-      port: sender.port.toString()
+      password: sender.password
     })
     setShowForm(true)
   }
@@ -190,7 +182,7 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender, user }) {
                 className="add-sender-btn"
                 onClick={() => {
                   setEditingId(null)
-                  setFormData({ name: '', email: '', password: '', host: 'smtp.gmail.com', port: '587' })
+                  setFormData({ name: '', email: '', password: '' })
                   setShowForm(true)
                 }}
               >
@@ -243,35 +235,6 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender, user }) {
                 <small className="help-text">Use Gmail App Password for Gmail accounts</small>
               </div>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="host">SMTP Host</label>
-                  <input
-                    type="text"
-                    id="host"
-                    name="host"
-                    value={formData.host}
-                    onChange={handleFormChange}
-                    placeholder="smtp.gmail.com"
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="port">SMTP Port</label>
-                  <input
-                    type="number"
-                    id="port"
-                    name="port"
-                    value={formData.port}
-                    onChange={handleFormChange}
-                    placeholder="587"
-                    required
-                  />
-                  <small className="help-text">587 (TLS) or 465 (SSL)</small>
-                </div>
-              </div>
-
               {error && <div className="error-message">{error}</div>}
               {success && <div className="success-message">{success}</div>}
 
@@ -285,7 +248,7 @@ function SenderModal({ isOpen, onClose, onSelectSender, currentSender, user }) {
                   onClick={() => {
                     setShowForm(false)
                     setEditingId(null)
-                    setFormData({ name: '', email: '', password: '', host: 'smtp.gmail.com', port: '587' })
+                    setFormData({ name: '', email: '', password: '' })
                   }}
                 >
                   Cancel

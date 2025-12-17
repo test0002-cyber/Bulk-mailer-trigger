@@ -12,6 +12,7 @@ initializeDB()
 
 const app = express()
 const PORT = process.env.PORT || 5000
+// Force rebuild: 2025-12-17 12:30:00
 
 // Middleware
 app.use(cors())

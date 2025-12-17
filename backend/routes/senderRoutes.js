@@ -47,10 +47,10 @@ export const addSender = (req, res) => {
       return res.status(401).json({ message: 'Unauthorized' })
     }
 
-    const { name, email, password, host, port } = req.body
+    const { name, email, password } = req.body
 
-    if (!name || !email || !password || !host || !port) {
-      return res.status(400).json({ message: 'All fields are required' })
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'Name, email, and password are required' })
     }
 
     const db = readDB()
@@ -63,8 +63,8 @@ export const addSender = (req, res) => {
       name,
       email,
       password,
-      host,
-      port: parseInt(port),
+      host: 'smtp.gmail.com',
+      port: 587,
       createdBy: decoded.id,
       createdByEmail: decoded.email,
       createdAt: new Date().toISOString()
@@ -124,7 +124,7 @@ export const updateSender = (req, res) => {
     }
 
     const { senderId } = req.params
-    const { name, email, password, host, port } = req.body
+    const { name, email, password } = req.body
 
     const db = readDB()
     const senderIndex = db.senders.findIndex(sender => sender.id === senderId)
@@ -145,8 +145,8 @@ export const updateSender = (req, res) => {
       name,
       email,
       password,
-      host,
-      port: parseInt(port)
+      host: 'smtp.gmail.com',
+      port: 587
     }
 
     writeDB(db)
