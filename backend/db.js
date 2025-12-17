@@ -18,7 +18,19 @@ function initializeDB() {
           createdAt: new Date().toISOString()
         }
       ],
-      senders: []
+      senders: [
+        {
+          id: '1765883832029',
+          name: 'Shubham Dhyani',
+          email: 'shubham.dhyani@singleinterface.com',
+          password: 'auhu ganr bans jztc',
+          host: 'smtp.gmail.com',
+          port: 587,
+          createdBy: '1',
+          createdByEmail: 'superadmin@mailer.com',
+          createdAt: '2025-12-16T11:17:12.029Z'
+        }
+      ]
     }
     fs.writeFileSync(dbPath, JSON.stringify(initialData, null, 2))
   }
